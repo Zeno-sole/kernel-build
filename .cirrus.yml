@@ -35,16 +35,12 @@ task:
     - name: visionfive-2
       env:
         base_path: visionfive-2
-        kernel_branch: VF2_v2.5.0
-        kernel_git: https://github.com/starfive-tech/linux
+        kernel_branch: JH7110_VisionFive2_devel
+        kernel_git: https://github.com/Zeno-sole/linux
         kernel_config: starfive_visionfive2_defconfig
       kernel_script: |
-        git clone -b ${kernel_branch} ${kernel_git} kernel
+        git clone --depth=1 -b ${kernel_branch} ${kernel_git} kernel
         pushd kernel
-          git fetch origin JH7110_VisionFive2_upstream
-          git cherry-pick b8c86872d1dc171d8f1c137917d6913cae2fa4f2
-          git cherry-pick aae538cd03bc8fc35979653d9180922d146da0ca
-          git cherry-pick 952b64d6665c8b6fdd13ba63be7adc3be51641d7
           make CROSS_COMPILE=riscv64-linux-gnu- ARCH=riscv ${kernel_config}
           if [ -f ../${base_path}/kernelconfig ]; then
             cp -v ../${base_path}/kernelconfig .config
